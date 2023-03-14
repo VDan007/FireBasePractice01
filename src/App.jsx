@@ -1,33 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
-import './App.css'
+import { initializeApp} from "firebase/app";
+import {
+  getFirestore, collection, getDocs
+} from "firebase/firestore";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD3t_Ogvh1Ld28nijFOVLsL5LQ4lcg3eLE",
+  authDomain: "project1-b26cd.firebaseapp.com",
+  projectId: "project1-b26cd",
+  storageBucket: "project1-b26cd.appspot.com",
+  messagingSenderId: "726758371591",
+  appId: "1:726758371591:web:5bc7d68ac9b7f7365995a2"
+};
+
+initializeApp(firebaseConfig);
+const db = getFirestore();
+const colRef = collection(db, 'books');
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [books, setBooks] = useState([]);
+  console.log(books)
+
+  useEffect(()=>{
+    getDocs(colRef)
+    .then((snapshot) =>snapshot.docs.map(doc=>console.log(doc.data())))
+      
+  },[]);
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+     </div>
   )
 }
 
