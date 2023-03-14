@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import { initializeApp} from "firebase/app";
 import {
-  getFirestore, collection, getDocs
+  getFirestore, collection, getDocs,addDoc
 } from "firebase/firestore";
 
 
@@ -15,9 +15,18 @@ const firebaseConfig = {
   appId: "1:726758371591:web:5bc7d68ac9b7f7365995a2"
 };
 
-initializeApp(firebaseConfig);
-const db = getFirestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const colRef = collection(db, 'books');
+
+// try{
+//   const docRef = await addDoc(collection(db,'users'),{
+//     first: "Daniel",
+//     last: "Lovelace",
+//   });
+// } catch(e){
+//   console.error(e);
+// }
 
 
 
@@ -26,8 +35,12 @@ function App() {
   console.log(books)
 
   useEffect(()=>{
-    getDocs(colRef)
-    .then((snapshot) =>snapshot.docs.map(doc=>console.log(doc.data())))
+    const snapShot = async ()=>{
+      const data = await getDocs(collection(db, 'books'));
+      data.forEach(item=>console.log(item.data()))
+      data.forEach(item=>console.log(item.id));
+    }
+    snapShot();
       
   },[]);
 
